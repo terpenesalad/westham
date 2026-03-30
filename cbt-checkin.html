@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>steady</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1814;
+    --bg2: #211f1b;
+    --bg3: #2a2822;
+    --card: #252320;
+    --border: #353028;
+    --text1: #e8e0d0;
+    --text2: #a89c88;
+    --text3: #6b6054;
+    --accent: #c4a882;
+    --accent2: #8ba888;
+    --danger: #c47e6e;
+    --calm: #7a9e9f;
+    --warm: #c4956a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text1);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  header {
+    padding: 28px 20px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .app-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
+  .app-date {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 400;
+  }
+
+  nav {
+    display: flex;
+    gap: 0;
+    padding: 20px 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav button {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px 14px 12px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  nav button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab { display: none; padding: 20px; }
+  .tab.active { display: block; }
+
+  /* ─── Cards ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text3);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--text1);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .card-body {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ─── Slider ─── */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .slider-label {
+    font-size: 11px;
+    color: var(--text3);
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .slider-label:last-child { text-align: right; }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(196,168,130,0.15);
+  }
+
+  .slider-value {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 6px;
+    line-height: 1;
+  }
+
+  .slider-desc {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ─── Textarea / Input ─── */
+  textarea, input[type=text] {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text1);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    padding: 12px;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus, input[type=text]:focus {
+    border-color: var(--accent);
+  }
+
+  textarea::placeholder, input::placeholder {
+    color: var(--text3);
+    font-style: italic;
+  }
+
+  /* ─── Buttons ─── */
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover { background: #d4b892; }
+
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-full { width: 100%; text-align: center; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  /* ─── Thought Record ─── */
+  .tr-step {
+    border-left: 2px solid var(--border);
+    padding-left: 14px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .tr-step::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    position: absolute;
+    left: -5px;
+    top: 4px;
+  }
+
+  .tr-step.active-step::before { background: var(--accent); }
+
+  .tr-step-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .tr-step-q {
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    color: var(--text1);
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* ─── Chip buttons ─── */
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .chip {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .chip.selected {
+    background: rgba(196,168,130,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ─── Exercise cards ─── */
+  .exercise-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .exercise-card:hover { border-color: var(--accent2); }
+
+  .exercise-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .exercise-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--text1);
+    margin-bottom: 4px;
+  }
+
+  .exercise-desc {
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  /* ─── Exercise modal ─── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,8,6,0.85);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-handle {
+    width: 36px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    color: var(--text1);
+    margin-bottom: 6px;
+  }
+
+  .modal-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .step-box {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--accent2);
+  }
+
+  .step-num {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: var(--text1);
+    line-height: 1.6;
+  }
+
+  .step-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ─── History ─── */
+  .history-entry {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+
+  .he-date {
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .he-level {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .he-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .dot.filled { background: var(--accent); }
+
+  .he-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .he-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+  }
+
+  .badge.thought { border-color: var(--calm); color: var(--calm); }
+  .badge.exercise { border-color: var(--accent2); color: var(--accent2); }
+
+  /* ─── Progress bar ─── */
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--calm), var(--accent2));
+    transition: width 0.4s ease;
+  }
+
+  /* ─── Section heading ─── */
+  .section-heading {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-bottom: 12px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ─── Divider ─── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  /* ─── Streak / Stats ─── */
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .stat-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.3px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .insight-box {
+    background: rgba(139,168,136,0.08);
+    border: 1px solid rgba(139,168,136,0.2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+
+  .insight-box p {
+    font-size: 13px;
+    color: var(--accent2);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="app-title">steady</span>
+  <span class="app-date" id="headerDate"></span>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('today')">today</button>
+  <button onclick="switchTab('thought')">thoughts</button>
+  <button onclick="switchTab('exercises')">exercises</button>
+  <button onclick="switchTab('history')">journal</button>
+</nav>
+
+<!-- ══════════════ TODAY TAB ══════════════ -->
+<div class="tab active" id="tab-today">
+
+  <div class="card">
+    <div class="card-label">how are you right now</div>
+    <div class="slider-value" id="anxSliderVal">5</div>
+    <div class="slider-desc" id="anxSliderDesc">moderate</div>
+    <div class="slider-row">
+      <span class="slider-label">calm</span>
+      <input type="range" id="anxSlider" min="1" max="10" value="5" oninput="updateSlider()">
+      <span class="slider-label">on edge</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">what's in your head today</div>
+    <div class="card-body" style="margin-bottom:10px;">Was there a moment today where you felt yourself scanning — watching for signs someone was upset, judging you, or pulling away?</div>
+    <textarea id="todayNote" rows="4" placeholder="You don't have to be precise. Just what's there…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-label">what showed up</div>
+    <div class="card-body" style="margin-bottom:10px;">Any of these patterns today?</div>
+    <div class="chip-group" id="patternChips">
+      <span class="chip" onclick="toggleChip(this)">Checking for signs of disapproval</span>
+      <span class="chip" onclick="toggleChip(this)">Replaying a conversation</span>
+      <span class="chip" onclick="toggleChip(this)">Assuming I said something wrong</span>
+      <span class="chip" onclick="toggleChip(this)">Needing reassurance</span>
+      <span class="chip" onclick="toggleChip(this)">Avoiding someone</span>
+      <span class="chip" onclick="toggleChip(this)">Over-explaining myself</span>
+      <span class="chip" onclick="toggleChip(this)">Quiet when I wanted to speak</span>
+      <span class="chip" onclick="toggleChip(this)">Misread a tone or expression</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">one small thing</div>
+    <div class="card-body" style="margin-bottom:10px;">Is there anything today that went okay — even just a small moment where you were present without dread?</div>
+    <textarea id="smallThing" rows="3" placeholder="Even something tiny counts…"></textarea>
+  </div>
+
+  <button class="btn btn-primary btn-full" onclick="saveEntry()">save today's check-in</button>
+  <div style="height:20px;"></div>
+</div>
+
+<!-- ══════════════ THOUGHT RECORD TAB ══════════════ -->
+<div class="tab" id="tab-thought">
+
+  <div class="card" style="background:rgba(122,158,159,0.06);border-color:rgba(122,158,159,0.2);">
+    <div class="card-body">
+      Hypervigilance turns threat-detection up high — your brain is working overtime scanning for social danger. This tool helps you slow that process down and get curious about what's actually true.
+    </div>
+  </div>
+
+  <div class="tr-step active-step">
+    <div class="tr-step-label">Step 1 · situation</div>
+    <div class="tr-step-q">What just happened, or what are you replaying?</div>
+    <textarea id="tr_situation" rows="3" placeholder="e.g. A friend seemed quiet when we talked. I immediately felt like I'd done something wrong."></textarea>
+  </div>
+
+  <div class="tr-step">
+    <div class="tr-step-label">Step 2 · hot thought</div>
+    <div class="tr-step-q">What was the automatic thought that came up?</div>
+    <textarea id="tr_hotthought" rows="2" placeholder="e.g. "She hates me now" or "I made it weird""></textarea>
+    <div style="margin-top:10px;">
+      <div class="card-body" style="margin-bottom:8px;">What type of thinking pattern is this?</div>
+      <div class="chip-group" id="distortionChips">
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">Mind reading</span>
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">Fortune telling</span>
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">Catastrophising</span>
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">Personalisation</span>
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">Emotional reasoning</span>
+        <span class="chip" onclick="toggleChip(this)" data-group="distortion">All-or-nothing</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tr-step">
+    <div class="tr-step-label">Step 3 · evidence</div>
+    <div class="tr-step-q">What's the evidence that thought is true?</div>
+    <textarea id="tr_for" rows="2" placeholder="e.g. She did seem distracted, and she replied with one word."></textarea>
+    <div style="margin-top:10px;">
+      <div class="tr-step-q">What's the evidence against it — or another explanation?</div>
+      <textarea id="tr_against" rows="3" placeholder="e.g. She mentioned she had a headache. She still made plans with me. I have no other reason to think she's upset."></textarea>
+    </div>
+  </div>
+
+  <div class="tr-step">
+    <div class="tr-step-label">Step 4 · reality check</div>
+    <div class="tr-step-q">What would you tell a friend in this exact situation?</div>
+    <textarea id="tr_friend" rows="3" placeholder="e.g. "She's probably just tired. You're projecting your fear of being a burden onto a normal moment.""></textarea>
+  </div>
+
+  <div class="tr-step">
+    <div class="tr-step-label">Step 5 · balanced thought</div>
+    <div class="tr-step-q">Can you write a more balanced version of the original thought?</div>
+    <textarea id="tr_balanced" rows="3" placeholder="e.g. "She might just be having an off day. I don't have evidence she's upset with me.""></textarea>
+
+    <div style="margin-top:14px;">
+      <div class="card-body" style="margin-bottom:8px;">How intense does the anxious thought feel now? (1–10)</div>
+      <div class="slider-row">
+        <span class="slider-label">less</span>
+        <input type="range" id="tr_after" min="1" max="10" value="5">
+        <span class="slider-label">still a lot</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-full" onclick="saveThoughtRecord()">save thought record</button>
+  <div style="height:20px;"></div>
+</div>
+
+<!-- ══════════════ EXERCISES TAB ══════════════ -->
+<div class="tab" id="tab-exercises">
+
+  <p class="section-heading">for right now — acute moments</p>
+
+  <div class="exercise-card" onclick="openExercise('53')">
+    <div class="exercise-tag">grounding · 2 min</div>
+    <div class="exercise-title">5-4-3-2-1 Anchor</div>
+    <div class="exercise-desc">Interrupt the spiral by pulling your attention into your body and senses.</div>
+  </div>
+
+  <div class="exercise-card" onclick="openExercise('breath')">
+    <div class="exercise-tag">nervous system · 3 min</div>
+    <div class="exercise-title">Extended exhale breathing</div>
+    <div class="exercise-desc">Longer exhales activate the parasympathetic system — your body's off switch for threat mode.</div>
+  </div>
+
+  <div class="exercise-card" onclick="openExercise('defuse')">
+    <div class="exercise-tag">cognitive defusion · 5 min</div>
+    <div class="exercise-title">Leaves on a stream</div>
+    <div class="exercise-desc">Watch your anxious thoughts pass by without grabbing onto them.</div>
+  </div>
+
+  <p class="section-heading" style="margin-top:6px;">for patterns — longer practice</p>
+
+  <div class="exercise-card" onclick="openExercise('attention')">
+    <div class="exercise-tag">attention training · 5 min</div>
+    <div class="exercise-title">Widen your lens</div>
+    <div class="exercise-desc">Social anxiety keeps attention focused inward on you. This practice shifts it outward.</div>
+  </div>
+
+  <div class="exercise-card" onclick="openExercise('safety')">
+    <div class="exercise-tag">behavioural · reflection</div>
+    <div class="exercise-title">Spot your safety behaviours</div>
+    <div class="exercise-desc">The things you do to feel safe in social situations can actually keep anxiety alive. Learn to notice them.</div>
+  </div>
+
+  <div class="exercise-card" onclick="openExercise('experiment')">
+    <div class="exercise-tag">behavioural experiment</div>
+    <div class="exercise-title">Test the prediction</div>
+    <div class="exercise-desc">Your anxious brain makes predictions. The only way to update them is to test them gently.</div>
+  </div>
+
+  <div class="exercise-card" onclick="openExercise('compassion')">
+    <div class="exercise-tag">self-compassion · 5 min</div>
+    <div class="exercise-title">Talk to yourself like someone you love</div>
+    <div class="exercise-desc">Hypervigilance often comes from self-protection. This practice softens the inner critic.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════ HISTORY TAB ══════════════ -->
+<div class="tab" id="tab-history">
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-val" id="statStreak">0</div>
+      <div class="stat-label">day streak</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statEntries">0</div>
+      <div class="stat-label">total entries</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statAvg">—</div>
+      <div class="stat-label">avg anxiety</div>
+    </div>
+  </div>
+
+  <div id="insightBox" class="insight-box" style="display:none;">
+    <p id="insightText"></p>
+  </div>
+
+  <p class="section-heading">past check-ins</p>
+  <div id="historyList"></div>
+</div>
+
+<!-- ══════════════ EXERCISE MODALS ══════════════ -->
+<div class="modal-overlay" id="exerciseModal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-tag" id="modalTag"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div style="height:12px;"></div>
+    <div id="modalContent"></div>
+    <div style="height:16px;"></div>
+    <button class="btn btn-ghost btn-full" onclick="document.getElementById('exerciseModal').classList.remove('open')">close</button>
+  </div>
+</div>
+
+<script>
+const EXERCISES = {
+  '53': {
+    tag: 'grounding · 2 min',
+    title: '5-4-3-2-1 Anchor',
+    steps: [
+      { n: '5 things you can see', text: 'Look around slowly. Name 5 things — not in your head, but things actually in the room with you right now.', sub: 'Take your time. Let your eyes rest on each one.' },
+      { n: '4 things you can touch', text: 'Feel 4 different textures. Your skin on the seat. The phone in your hand. Something rough, something smooth.', sub: 'Notice temperature, weight, hardness.' },
+      { n: '3 things you can hear', text: 'Without moving, let sounds come to you. Traffic. Someone\'s voice. Your own breath.', sub: 'You don\'t need to identify them, just notice.' },
+      { n: '2 things you can smell', text: 'Even faint smells — the room, your clothes, outside air.', sub: 'No smell? Notice the absence.' },
+      { n: '1 slow breath', text: 'Take one long breath — slow exhale, twice as long as the inhale. Feel your shoulders drop.', sub: 'You are here. This moment is okay.' }
+    ]
+  },
+  'breath': {
+    tag: 'nervous system · 3 min',
+    title: 'Extended exhale breathing',
+    steps: [
+      { n: 'Why this works', text: 'Your exhale activates the vagus nerve — it literally signals to your body that danger has passed. A longer exhale than inhale is the quickest way to shift out of fight-or-flight.', sub: null },
+      { n: 'The pattern: 4-2-7', text: 'Breathe IN for 4 counts. HOLD for 2 counts. Breathe OUT for 7 counts (slowly).', sub: 'The exhale should feel long and quiet, not forced.' },
+      { n: 'Do this 6 times', text: 'Six full breath cycles — about 3 minutes. If your mind wanders, just return to counting.', sub: 'You might feel a wave of calm or slight lightheadedness. Both are normal.' },
+      { n: 'Afterwards', text: 'Notice whether the thought or feeling that was overwhelming feels any different in your body now. The content may not have changed, but your state has shifted.', sub: null }
+    ]
+  },
+  'defuse': {
+    tag: 'cognitive defusion · 5 min',
+    title: 'Leaves on a stream',
+    steps: [
+      { n: 'Sit somewhere quiet', text: 'Close your eyes if that feels comfortable. Imagine you\'re sitting beside a slow-moving stream. Leaves are drifting past on the surface.', sub: null },
+      { n: 'Place your thoughts on the leaves', text: 'As each thought comes — "she\'s annoyed at me", "I shouldn\'t have said that" — imagine placing it on a leaf and watching it float away downstream.', sub: 'You\'re not pushing thoughts away. You\'re just not holding them.' },
+      { n: 'Notice when you get pulled in', text: 'If you find yourself following a thought — analysing it, arguing with it — just notice that, and return to the riverbank.', sub: 'Getting pulled in is not failure. It\'s the practice.' },
+      { n: 'Repeat for 5 minutes', text: 'Leaves arrive. You place thoughts on them. Leaves pass. New leaves come.', sub: 'The thoughts are real. But you don\'t have to swim after every one.' }
+    ]
+  },
+  'attention': {
+    tag: 'attention training · 5 min',
+    title: 'Widen your lens',
+    steps: [
+      { n: 'Where is your attention right now?', text: 'When anxious in social situations, attention tends to turn inward — monitoring your face, voice, what you\'re doing with your hands, how you\'re coming across. This makes anxiety worse and connection harder.', sub: null },
+      { n: 'Try this', text: 'Right now, shift your attention to the room. What\'s the furthest thing you can see? What sounds are coming from outside? Who else is here?', sub: 'The goal is curious, open, outward attention — not performance monitoring.' },
+      { n: 'In conversation', text: 'Practice getting genuinely curious about the other person. What are they actually saying? What\'s their mood? Not "do they like me?" — but "what is their experience right now?"', sub: 'Genuine interest is incompatible with self-consciousness.' },
+      { n: 'Expand and contract', text: 'Practise switching: focus tightly on one thing (a sound), then broaden out to take in everything at once. Narrow. Wide. This builds attentional flexibility.', sub: null }
+    ]
+  },
+  'safety': {
+    tag: 'behavioural · reflection',
+    title: 'Spot your safety behaviours',
+    steps: [
+      { n: 'What are safety behaviours?', text: 'They\'re the things you do to prevent feared social outcomes — staying quiet, over-explaining, checking your phone, asking for reassurance, replaying conversations. They feel protective.', sub: 'But they signal danger to your nervous system and prevent you from learning the feared outcome won\'t happen.' },
+      { n: 'Common ones — do any apply?', text: '• Avoiding eye contact\n• Rehearsing what you\'ll say before saying it\n• Asking repeatedly if someone is okay with you\n• Staying on the edges of groups\n• Filling silences immediately\n• Laughing nervously\n• Post-event replaying and "correcting"', sub: null },
+      { n: 'The experiment', text: 'Choose one safety behaviour this week. Notice when you use it. Ask: "If I dropped this just for a moment, what am I afraid would happen?"', sub: 'You don\'t have to stop doing it. Just get curious about what it\'s protecting you from.' },
+      { n: 'The key insight', text: 'Safety behaviours "work" — the feared thing doesn\'t happen. But your brain gives credit to the behaviour, not to the fact that the threat wasn\'t real. That\'s how anxiety perpetuates itself.', sub: null }
+    ]
+  },
+  'experiment': {
+    tag: 'behavioural experiment',
+    title: 'Test the prediction',
+    steps: [
+      { n: 'Your brain is a prediction machine', text: 'Anxiety makes predictions: "If I say the wrong thing, they\'ll think less of me." "If I don\'t check in, they\'ll assume I don\'t care." These feel like facts. They\'re hypotheses.', sub: null },
+      { n: 'Write down a prediction', text: 'What does your anxious brain predict will happen in a social situation this week? Be specific.', sub: 'e.g. "If I don\'t text back immediately, she\'ll think I don\'t value the friendship."' },
+      { n: 'Design a small test', text: 'What\'s the smallest version of the feared situation you could try? Not reckless — just slightly outside your comfort zone.', sub: 'e.g. Wait 2 hours before replying to a message, then observe what actually happens.' },
+      { n: 'Afterwards — what happened?', text: 'Compare the prediction to reality. Often the feared outcome doesn\'t occur, or it\'s much smaller. Over time, this rebuilds your threat-detection system with accurate data.', sub: 'One experiment doesn\'t fix everything. Dozens of gentle ones slowly do.' }
+    ]
+  },
+  'compassion': {
+    tag: 'self-compassion · 5 min',
+    title: 'Talk to yourself like someone you love',
+    steps: [
+      { n: 'Notice the inner critic', text: 'When hypervigilance fires — "I messed that up", "they must think I\'m too much" — there\'s often a very harsh inner voice. It thinks it\'s protecting you. It\'s often just hurting you.', sub: null },
+      { n: 'The friend test', text: 'Think of someone you love — a close friend, a sibling. If they came to you with this exact worry, what would you actually say to them?', sub: 'Write it or say it out loud. Notice the difference in tone.' },
+      { n: 'Now say it to yourself', text: 'Not "you\'re fine" (dismissive) — but the real, honest, caring version. "You\'re scared of being abandoned and that makes sense given what you\'ve been through. You\'re not too much. You\'re trying."', sub: null },
+      { n: 'Sit with it for a moment', text: 'You don\'t have to believe it fully. You just have to be willing to let it land, even a little.', sub: 'Hypervigilance learned its behaviour somewhere. It helped once. It\'s okay to thank it and choose something softer.' }
+    ]
+  }
+};
+
+// ─── State ───
+let state = JSON.parse(localStorage.getItem('steady_state') || '{"entries":[]}');
+
+function save() {
+  localStorage.setItem('steady_state', JSON.stringify(state));
+}
+
+// ─── Header date ───
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const now = new Date();
+document.getElementById('headerDate').textContent =
+  `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+
+// ─── Tab switching ───
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'history') renderHistory();
+}
+
+// ─── Slider ───
+const DESCS = ['','at rest','very mild','mild','noticeable','moderate','on edge','quite anxious','intense','very intense','at the edge'];
+function updateSlider() {
+  const v = document.getElementById('anxSlider').value;
+  document.getElementById('anxSliderVal').textContent = v;
+  document.getElementById('anxSliderDesc').textContent = DESCS[v];
+}
+
+// ─── Chips ───
+function toggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+// ─── Save entry ───
+function saveEntry() {
+  const level = parseInt(document.getElementById('anxSlider').value);
+  const note = document.getElementById('todayNote').value.trim();
+  const small = document.getElementById('smallThing').value.trim();
+  const patterns = [...document.querySelectorAll('#patternChips .chip.selected')].map(c => c.textContent);
+
+  const today = toDateStr(new Date());
+  const existing = state.entries.findIndex(e => e.date === today);
+  const entry = { date: today, level, note, small, patterns, type: 'checkin' };
+
+  if (existing >= 0) state.entries[existing] = entry;
+  else state.entries.push(entry);
+  save();
+
+  // Reset
+  document.getElementById('anxSlider').value = 5;
+  updateSlider();
+  document.getElementById('todayNote').value = '';
+  document.getElementById('smallThing').value = '';
+  document.querySelectorAll('#patternChips .chip.selected').forEach(c => c.classList.remove('selected'));
+
+  showToast('check-in saved ✓');
+}
+
+function saveThoughtRecord() {
+  const today = toDateStr(new Date());
+  const rec = {
+    date: today,
+    type: 'thought',
+    situation: document.getElementById('tr_situation').value.trim(),
+    hotthought: document.getElementById('tr_hotthought').value.trim(),
+    distortions: [...document.querySelectorAll('#distortionChips .chip.selected')].map(c => c.textContent),
+    for: document.getElementById('tr_for').value.trim(),
+    against: document.getElementById('tr_against').value.trim(),
+    friend: document.getElementById('tr_friend').value.trim(),
+    balanced: document.getElementById('tr_balanced').value.trim(),
+    after: parseInt(document.getElementById('tr_after').value)
+  };
+  state.entries.push(rec);
+  save();
+
+  ['tr_situation','tr_hotthought','tr_for','tr_against','tr_friend','tr_balanced'].forEach(id =>
+    document.getElementById(id).value = '');
+  document.querySelectorAll('#distortionChips .chip.selected').forEach(c => c.classList.remove('selected'));
+  showToast('thought record saved ✓');
+}
+
+// ─── Exercise modal ───
+function openExercise(id) {
+  const ex = EXERCISES[id];
+  if (!ex) return;
+  document.getElementById('modalTag').textContent = ex.tag;
+  document.getElementById('modalTitle').textContent = ex.title;
+  document.getElementById('modalContent').innerHTML = ex.steps.map(s => `
+    <div class="step-box">
+      <div class="step-num">${s.n}</div>
+      <div class="step-text">${s.text}</div>
+      ${s.sub ? `<div class="step-sub">${s.sub}</div>` : ''}
+    </div>
+  `).join('');
+  document.getElementById('exerciseModal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('exerciseModal'))
+    document.getElementById('exerciseModal').classList.remove('open');
+}
+
+// ─── History ───
+function toDateStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function formatDate(str) {
+  const d = new Date(str + 'T12:00:00');
+  return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+function renderHistory() {
+  const entries = [...state.entries].reverse();
+  const checkins = entries.filter(e => e.type === 'checkin');
+  const thoughts = entries.filter(e => e.type === 'thought');
+
+  // Stats
+  document.getElementById('statEntries').textContent = checkins.length;
+  if (checkins.length) {
+    const avg = (checkins.reduce((s, e) => s + e.level, 0) / checkins.length).toFixed(1);
+    document.getElementById('statAvg').textContent = avg;
+  }
+
+  // Streak
+  let streak = 0;
+  const today = toDateStr(new Date());
+  let d = new Date();
+  while (true) {
+    const ds = toDateStr(d);
+    if (checkins.find(e => e.date === ds)) { streak++; d.setDate(d.getDate() - 1); }
+    else break;
+  }
+  document.getElementById('statStreak').textContent = streak;
+
+  // Insight
+  const insightBox = document.getElementById('insightBox');
+  if (checkins.length >= 3) {
+    const recent = checkins.slice(0, 5);
+    const recentAvg = recent.reduce((s,e) => s + e.level, 0) / recent.length;
+    const allAvg = checkins.reduce((s,e) => s + e.level, 0) / checkins.length;
+    let insight = '';
+    if (recentAvg < allAvg - 0.5)
+      insight = `Your recent check-ins are trending calmer than your average. Something is shifting.`;
+    else if (recentAvg > allAvg + 0.5)
+      insight = `This has been a harder stretch. That's worth acknowledging — and it won't stay this way.`;
+    else
+      insight = `You've been showing up consistently. That steadiness matters more than the numbers.`;
+    document.getElementById('insightText').textContent = insight;
+    insightBox.style.display = 'block';
+  } else {
+    insightBox.style.display = 'none';
+  }
+
+  // List
+  const list = document.getElementById('historyList');
+  if (!entries.length) {
+    list.innerHTML = '<div class="empty-state">Your entries will appear here.<br>Start with today\'s check-in.</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map(e => {
+    if (e.type === 'checkin') {
+      const dots = Array.from({length:10}, (_,i) =>
+        `<div class="dot${i < e.level ? ' filled' : ''}"></div>`).join('');
+      return `
+        <div class="history-entry">
+          <div class="he-date">${formatDate(e.date)}</div>
+          <div class="he-level">
+            <div class="he-dots">${dots}</div>
+            <span style="font-size:11px;color:var(--text3)">${DESCS[e.level]}</span>
+          </div>
+          ${e.note ? `<div class="he-text">"${e.note}"</div>` : ''}
+          ${e.small ? `<div class="he-text" style="color:var(--accent2);margin-top:6px;">"${e.small}"</div>` : ''}
+          ${e.patterns && e.patterns.length ? `<div class="he-badges">${e.patterns.map(p=>`<span class="badge">${p}</span>`).join('')}</div>` : ''}
+        </div>`;
+    } else {
+      return `
+        <div class="history-entry">
+          <div class="he-date">${formatDate(e.date)}</div>
+          <div class="he-badges"><span class="badge thought">thought record</span>${e.distortions ? e.distortions.map(d=>`<span class="badge thought">${d}</span>`).join('') : ''}</div>
+          ${e.situation ? `<div class="he-text" style="margin-top:8px;">"${e.situation}"</div>` : ''}
+          ${e.balanced ? `<div class="he-text" style="color:var(--accent2);margin-top:6px;">→ "${e.balanced}"</div>` : ''}
+        </div>`;
+    }
+  }).join('');
+}
+
+// ─── Toast ───
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    background:var(--accent);color:var(--bg);padding:10px 20px;border-radius:20px;
+    font-size:13px;font-weight:500;z-index:200;animation:fadeIn 0.2s ease;font-family:'DM Sans',sans-serif;`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+</script>
+</body>
+</html>
